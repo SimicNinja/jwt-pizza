@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,12 +18,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22.x'
 
-      - name: create static deployment file
+      - name: set version
+        id: set_version
         run: |
-          npm ci
-          npm run build
+          version=$(date +'%Y%m%d.%H%M%S')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          printf '{"version": "%s" }' "$version" > public/version.json
+
+      - name: Build
+        run: |
+          npm ci && npm run build
+          cp dist/index.html dist/404.html
 
       - name: Update pages artifact
         uses: actions/upload-pages-artifact@v3
