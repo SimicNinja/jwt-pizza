@@ -2,13 +2,6 @@ import { expect } from 'playwright-test-coverage';
 import type { Page } from '@playwright/test';
 import { Role, type User } from '../src/service/pizzaService';
 
-export async function setupUser(page: Page, user?: User) {
-	await page.route('*/**/api/user/me', async (route) => {
-		expect(route.request().method()).toBe('GET');
-		await route.fulfill({ json: user });
-	});
-}
-
 export async function setupMenu(page: Page) {
 	await page.route('*/**/api/order/menu', async (route) => {
 		const menuRes = [
@@ -41,7 +34,7 @@ export async function franchiseList(page: Page) {
 					name: 'LotaPizza',
 					admins: [{ id: '3', name: 'Kai Chen', email: 'd@jwt.com' }],
 					stores: [
-						{ id: 4, name: 'Lehi' },
+						{ id: 3, name: 'SLC' },
 						{ id: 5, name: 'Springville' },
 						{ id: 6, name: 'American Fork' },
 					],
