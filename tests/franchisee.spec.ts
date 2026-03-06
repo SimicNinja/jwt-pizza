@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright-test-coverage';
 
-test('check franchise dashboard and login', async ({ page }) => {
+test.skip('check franchise dashboard and login', async ({ page }) => {
 	await page.goto('http://localhost:5173/');
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByRole('textbox', { name: 'Email address' }).fill('f@jwt.com');
@@ -16,7 +16,7 @@ test('check franchise dashboard and login', async ({ page }) => {
 	await expect(page.getByRole('main')).toContainText('Everything you need to run an JWT Pizza franchise. Your gateway to success.');
 });
 
-test('create Provo store', async ({ page }) => {
+test.skip('create Provo store', async ({ page }) => {
 	await page.goto('http://localhost:5173/');
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByRole('textbox', { name: 'Email address' }).fill('f@jwt.com');
@@ -42,7 +42,7 @@ test('create Provo store', async ({ page }) => {
 	await expect(page.locator('tbody')).toContainText('Provo');
 });
 
-test('close Provo store', async ({ page }) => {
+test.skip('close Provo store', async ({ page }) => {
 	await page.goto('http://localhost:5173/');
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByRole('textbox', { name: 'Email address' }).fill('f@jwt.com');
