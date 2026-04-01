@@ -77,7 +77,7 @@ export function scenario_1() {
       fail('Login was *not* 200');
     }
 
-    vars['token1'] = jsonpath.query(response.json(), '$.token')[0]
+    vars['authToken'] = jsonpath.query(response.json(), '$.token')[0]
 
     response = http.options('https://pizza-service.simicninja.click/api/auth', null, {
       headers: {
@@ -100,7 +100,7 @@ export function scenario_1() {
         accept: '*/*',
         'accept-encoding': 'gzip, deflate, br, zstd',
         'accept-language': 'en-US,en;q=0.9',
-        authorization: `Bearer ${vars['token1']}`,
+        authorization: `Bearer ${vars['authToken']}`,
         'content-type': 'application/json',
         origin: 'https://pizza.simicninja.click',
         priority: 'u=1, i',
@@ -135,7 +135,7 @@ export function scenario_1() {
           accept: '*/*',
           'accept-encoding': 'gzip, deflate, br, zstd',
           'accept-language': 'en-US,en;q=0.9',
-          authorization: `Bearer ${vars['token1']}`,
+          authorization: `Bearer ${vars['authToken']}`,
           'content-type': 'application/json',
           origin: 'https://pizza.simicninja.click',
           priority: 'u=1, i',
@@ -174,7 +174,7 @@ export function scenario_1() {
         accept: '*/*',
         'accept-encoding': 'gzip, deflate, br, zstd',
         'accept-language': 'en-US,en;q=0.9',
-        authorization: `Bearer ${vars['token1']}`,
+        authorization: `Bearer ${vars['authToken']}`,
         'content-type': 'application/json',
         origin: 'https://pizza.simicninja.click',
         priority: 'u=1, i',
@@ -211,7 +211,7 @@ export function scenario_1() {
           accept: '*/*',
           'accept-encoding': 'gzip, deflate, br, zstd',
           'accept-language': 'en-US,en;q=0.9',
-          authorization: `Bearer ${vars['token1']}`,
+          authorization: `Bearer ${vars['authToken']}`,
           'content-type': 'application/json',
           origin: 'https://pizza.simicninja.click',
           priority: 'u=1, i',
@@ -224,6 +224,13 @@ export function scenario_1() {
         },
       }
     )
+
+    if (!check(response, { 'order status equals 200': (response) => response.status.toString() === '200' })) {
+      console.log(response.body);
+      fail('Order was *not* 200');
+    }
+
+    vars['orderJWT'] = jsonpath.query(response.json(), '$.jwt')[0]
 
     response = http.options('https://pizza-service.simicninja.click/api/order', null, {
       headers: {
@@ -243,13 +250,13 @@ export function scenario_1() {
 
     response = http.post(
       'https://pizza-factory.cs329.click/api/order/verify',
-      '{"jwt":"eyJpYXQiOjE3NzUwMDQ5ODgsImV4cCI6MTc3NTA5MTM4OCwiaXNzIjoiY3MzMjkuY2xpY2siLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9TcF94VzhlM3kwNk1KS3ZIeW9sRFZMaXZXX2hnTWxhcFZSUVFQVndiY0UifQ.eyJ2ZW5kb3IiOnsiaWQiOiJibmluamEiLCJuYW1lIjoiT3dlbiBXZXJ0cyJ9LCJkaW5lciI6eyJpZCI6MSwibmFtZSI6IuW4uOeUqOWQjeWtlyIsImVtYWlsIjoiYUBqd3QuY29tIn0sIm9yZGVyIjp7Iml0ZW1zIjpbeyJtZW51SWQiOjcsImRlc2NyaXB0aW9uIjoiUGVwcGVyb25pIiwicHJpY2UiOjAuMDA0Mn0seyJtZW51SWQiOjcsImRlc2NyaXB0aW9uIjoiUGVwcGVyb25pIiwicHJpY2UiOjAuMDA0Mn0seyJtZW51SWQiOjIsImRlc2NyaXB0aW9uIjoiUGVwcGVyb25pIiwicHJpY2UiOjAuMDA0Mn0seyJtZW51SWQiOjIsImRlc2NyaXB0aW9uIjoiUGVwcGVyb25pIiwicHJpY2UiOjAuMDA0Mn1dLCJzdG9yZUlkIjoiMSIsImZyYW5jaGlzZUlkIjoxLCJpZCI6MTB9fQ.KC_dPK4--atW_Ldl5fiod4x-_Clg7X2-5UBCBNbc00FCZTBcfH5TUfrRNdyLQPgLZLOJsKyyUHKdPPNokrgFXRN74256o8-XnUMGkLfNswTr0JATQQvyqOt8t073FpQEF2WuQYxRNyVl2dhFUyDgBW79Q7XbA3ISeWoeOXySgXHE5O2aFMu5W0qh2flrdlzt4hR82MNtd6lQaVoYYjKuhiQ1QK35-hNWZ1HTrcI2nIZF9l-FiuKH05BLE3dsmlOXvJhOCtgPkf5J86JzeQbrn5soHG50JZPVMHo7AiGdRWy5VmhYu6CzgGKYf4Etj33ENU6ztz6n4soADWlykTFUZwwMohkS4nnFxKrGNR-4cPudWVlDVzTUWz4LfHUmPDlO7YRCh3u6kAbuP9quPYFSP_CFKq2313XDhcCIdlMd1Gep53TJOGBkRAFeC-bbuxNj6n2jgLTSkvs6I-ioyH1p14gbO6NquQCgBLb9H2DuaP-5xP1p0HaTm-4sUJXO5Q34vpoGIQQDwMP0Ly52D-8PceSJ5sabNq3u-w201Vdexm0lAEi4MR-QtWtHTrffMwuBBOffhp9GFXibiRZDGW8MCATLa0OHdPRz-OJUfXDNND-Pt-iGgDpx3ri3EU_FgZR3N3n2t3h9nipvJT_I7tePRk6Hqt7fEske2L-6NHqgiKs"}',
+      JSON.stringify({ jwt: vars['orderJWT'] }),
       {
         headers: {
           accept: '*/*',
           'accept-encoding': 'gzip, deflate, br, zstd',
           'accept-language': 'en-US,en;q=0.9',
-          authorization: `Bearer ${vars['token1']}`,
+          authorization: `Bearer ${vars['authToken']}`,
           'content-type': 'application/json',
           origin: 'https://pizza.simicninja.click',
           priority: 'u=1, i',
