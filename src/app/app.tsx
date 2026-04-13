@@ -57,6 +57,12 @@ export default function App() {
   function isAdmin() {
     return Role.isRole(user, Role.Admin);
   }
+  function isFranchisee() {
+    return Role.isRole(user, Role.Franchisee);
+  }
+  function isNotDiner() {
+    return isAdmin() || isFranchisee();
+  }
   function isNotAdmin() {
     return !isAdmin();
   }
@@ -75,16 +81,16 @@ export default function App() {
     { title: 'About', to: '/about', component: <About />, display: ['footer'] },
     { title: 'History', to: '/history', component: <History />, display: ['footer'] },
     { title: 'Admin', to: '/admin-dashboard', component: <AdminDashboard user={user} />, constraints: [isAdmin], display: ['nav'] },
-    { title: 'Create franchise', to: '/:subPath?/create-franchise', component: <CreateFranchise />, display: [] },
-    { title: 'Close franchise', to: '/:subPath?/close-franchise', component: <CloseFranchise />, display: [] },
-    { title: 'Create store', to: '/:subPath?/create-store', component: <CreateStore />, display: [] },
-    { title: 'Close store', to: '/:subPath?/close-store', component: <CloseStore />, display: [] },
+    { title: 'Create franchise', to: '/:subPath?/create-franchise', component: <CreateFranchise />, constraints: [loggedIn, isAdmin], display: [] },
+    { title: 'Close franchise', to: '/:subPath?/close-franchise', component: <CloseFranchise />, constraints: [loggedIn, isAdmin], display: [] },
+    { title: 'Create store', to: '/:subPath?/create-store', component: <CreateStore />, constraints: [loggedIn, isNotDiner], display: [] },
+    { title: 'Close store', to: '/:subPath?/close-store', component: <CloseStore />, constraints: [loggedIn, isNotDiner], display: [] },
     { title: 'Payment', to: '/payment', component: <Payment />, display: [] },
     { title: 'Delivery', to: '/delivery', component: <Delivery />, display: [] },
     { title: 'Login', to: '/:subPath?/login', component: <Login setUser={setUser} />, constraints: [loggedOut], display: ['nav'] },
     { title: 'Register', to: '/:subPath?/register', component: <Register setUser={setUser} />, constraints: [loggedOut], display: ['nav'] },
     { title: 'Logout', to: '/:subPath?/logout', component: <Logout setUser={setUser} />, constraints: [loggedIn], display: ['nav'] },
-    { title: 'Docs', to: '/docs/:docType?', component: <Docs />, display: [] },
+    { title: 'Docs', to: '/docs/:docType?', component: <Docs />, display: [loggedIn, isAdmin] },
     { title: 'Opps', to: '*', component: <NotFound />, display: [] },
   ];
 
