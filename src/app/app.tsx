@@ -90,7 +90,7 @@ export default function App() {
     { title: 'Login', to: '/:subPath?/login', component: <Login setUser={setUser} />, constraints: [loggedOut], display: ['nav'] },
     { title: 'Register', to: '/:subPath?/register', component: <Register setUser={setUser} />, constraints: [loggedOut], display: ['nav'] },
     { title: 'Logout', to: '/:subPath?/logout', component: <Logout setUser={setUser} />, constraints: [loggedIn], display: ['nav'] },
-    { title: 'Docs', to: '/docs/:docType?', component: <Docs />, display: [loggedIn, isAdmin] },
+    { title: 'Docs', to: '/docs/:docType?', component: <Docs />, constraints: [loggedIn, isAdmin], display: [] },
     { title: 'Opps', to: '*', component: <NotFound />, display: [] },
   ];
 
@@ -102,7 +102,11 @@ export default function App() {
       <main className="size-full">
         <Routes>
           {navItems.map((item) => (
-            <Route key={item.title} path={item.to} element={item.component} />
+            <Route 
+              key={item.title} 
+              path={item.to} 
+              element={<ProtectedRoute item={item} user={user} />}
+            />
           ))}
         </Routes>
       </main>
@@ -110,4 +114,25 @@ export default function App() {
       <Footer navItems={navItems} />
     </div>
   );
+}
+
+interface ProtectedRouteProps {
+  item: any;
+  user: User | null;
+}
+
+function ProtectedRoute(props: ProtectedRouteProps) {
+  const { item, user } = props;
+
+  function validateConstraints(constraints?: (() => boolean)[]) {
+    if (!constraints) return true;
+    return constraints.every((c) => c());
+  }
+
+  // If route has constraints and they fail, show NotFound instead of component
+  if (item.constraints && !validateConstraints(item.constraints)) {
+    return <NotFound />;
+  }
+
+  return item.component;
 }
