@@ -211,3 +211,6 @@ Participants: Piper Dickson, Owen Werts
 
 ## Combined Summary of Learnings
 
+Our shared findings show that secure-by-default development greatly reduces later hardening work. Implementing input validation, least-privilege access, and safe backend checks early prevented several attack attempts from becoming major incidents. We also saw that client-side controls alone are not enough, because users can bypass UI restrictions and manipulate requests directly.
+
+We learned that security depends on both system design and user behavior. Weak credentials increased brute-force risk, while stronger password choices and policy enforcement improved resilience. We also confirmed that repeated permission checks across UI, API, and database layers are necessary defense-in-depth, not redundancy, and that sensitive values like prices and ownership must always be verified server-side from trusted data.
