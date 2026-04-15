@@ -25,7 +25,12 @@ export default function Menu() {
   }, []);
 
   function selectPizza(pizza: Pizza) {
-    setOrder({ items: [...order.items, { menuId: pizza.id, description: pizza.title, price: pizza.price }] });
+    setOrder({
+      items: [
+        ...order.items,
+        {menuId: pizza.id, description: pizza.title}
+      ]
+});
   }
 
   function checkout(event: React.FormEvent) {

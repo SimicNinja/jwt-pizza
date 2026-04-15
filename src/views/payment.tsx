@@ -23,7 +23,12 @@ export default function Payment() {
 
   async function processPayment() {
     try {
-      const confirmation = await pizzaService.order(order);
+      const secureOrder = {
+        franchiseId: order.franchiseId,
+        storeId: order.storeId,
+        items: order.items.map((item) => ({ menuId: item.menuId })),
+      }
+      const confirmation = await pizzaService.order(secureOrder);
       navigate('/delivery', { state: { order: confirmation.order, jwt: confirmation.jwt } });
     } catch (err: any) {
       setErrorMessage(err.message);
