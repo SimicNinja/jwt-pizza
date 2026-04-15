@@ -72,7 +72,7 @@ export default function Payment() {
                     <tbody className="divide-y divide-gray-200">
                       {order.items.map((item: OrderItem, index: number) => (
                         <tr key={index} className="hover:bg-gray-100">
-                          <td className="px-6 py-4 whitespace-nowrap text-start text-xs sm:text-sm font-medium text-gray-800">{item.description}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-start text-xs sm:text-sm font-medium text-gray-800">{item.title}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-start text-xs sm:text-sm text-gray-800">{item.price.toLocaleString()} ₿</td>
                         </tr>
                       ))}

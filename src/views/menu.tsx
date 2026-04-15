@@ -29,7 +29,7 @@ export default function Menu() {
       ...order,
       items: [
         ...order.items,
-        { menuId: pizza.id, description: pizza.description, price: pizza.price }
+        { menuId: pizza.id, title: pizza.title, description: pizza.description, price: pizza.price }
       ]
     });
   }
