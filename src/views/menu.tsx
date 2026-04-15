@@ -26,11 +26,12 @@ export default function Menu() {
 
   function selectPizza(pizza: Pizza) {
     setOrder({
+      ...order,
       items: [
         ...order.items,
-        {menuId: pizza.id, description: pizza.title}
+        { menuId: pizza.id, description: pizza.description, price: pizza.price }
       ]
-});
+    });
   }
 
   function checkout(event: React.FormEvent) {
